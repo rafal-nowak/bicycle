@@ -41,68 +41,52 @@ Content-Type: application/json
 %}
 
 ### get reservation by id
-GET http://localhost:8080/api/v1/reservations/res2
+GET http://localhost:8080/api/v1/availabilities/bike1
 Accept: application/json
 Content-Type: application/json
 Authorization: {{auth_token}}
 
+### get all availabilities
+GET http://localhost:8080/api/v1/availabilities
+Accept: application/json
+Content-Type: application/json
+Authorization: {{auth_token}}
 
-#### delete reservation
-#DELETE http://localhost:8080/api/v1/reservations/res1
+#### get all availabilities
+#GET http://localhost:8080/api/v1/availabilities?page=2&size=3
 #Accept: application/json
 #Content-Type: application/json
 #Authorization: {{auth_token}}
 
-### get all reservations
-GET http://localhost:8080/api/v1/reservations
-Accept: application/json
-Content-Type: application/json
-Authorization: {{auth_token}}
-
-### get all reservations
-GET http://localhost:8080/api/v1/reservations?page=2&size=3
-Accept: application/json
-Content-Type: application/json
-Authorization: {{auth_token}}
-
-### book seats
-POST http://localhost:8080/api/v1/reservations/res2/book
+### lock bicycle
+POST http://localhost:8080/api/v1/availabilities/lock
 Accept: application/json
 Content-Type: application/json
 Authorization: {{auth_token}}
 
 {
-  "seatNumbers": [1, 2, 3, 4]
+  "bicycleId": "bike1",
+  "userId": 1
 }
 
-### book seats on behalf of the user
-POST http://localhost:8080/api/v1/reservations/res2/book
+### unlock bicycle
+POST http://localhost:8080/api/v1/availabilities/unlock
 Accept: application/json
 Content-Type: application/json
 Authorization: {{auth_token}}
 
 {
-  "seatNumbers": [1, 2, 3, 4],
-  "userId": 3
+  "bicycleId": "bike1",
+  "userId": 1
 }
 
-### release seats
-POST http://localhost:8080/api/v1/reservations/res2/release
-Accept: application/json
-Content-Type: application/json
-Authorization: {{auth_token}}
-
-{
-  "seatNumbers": [2, 3]
-}
-
-### create reservation
-POST http://localhost:8080/api/v1/reservations
-Accept: application/json
-Content-Type: application/json
-Authorization: {{auth_token}}
-
-{
-  "reservationNumber": "res3",
-  "amountOfSeats": 3
-}
+#### create reservation
+#POST http://localhost:8080/api/v1/reservations
+#Accept: application/json
+#Content-Type: application/json
+#Authorization: {{auth_token}}
+#
+#{
+#  "reservationNumber": "res3",
+#  "amountOfSeats": 3
+#}
