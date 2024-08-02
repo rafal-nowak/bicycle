@@ -1,0 +1,26 @@
+server:
+    port: 8080
+    error:
+        include-message: always
+
+cors:
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    exposed-headers: "*"
+
+spring:
+    application:
+        name: cinema-poc
+    datasource:
+        url: jdbc:postgresql://localhost:5432/cinema
+        username: cinemauser
+        password: cinemapassword
+    jpa:
+        hibernate:
+            ddl-auto: create
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                format_sql: true
+        show-sql: true
