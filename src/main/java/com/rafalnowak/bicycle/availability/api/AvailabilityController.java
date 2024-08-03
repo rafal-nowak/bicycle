@@ -28,25 +28,25 @@ import org.springframework.web.bind.annotation.RestController;
 )
 class AvailabilityController {
 
-    private final AvailabilityService availabilityService;
-
-    @PostMapping
-    public ResponseEntity<Void> createReservation(@RequestBody CreateCommand createCommand){
-        availabilityService.create(createCommand);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("lock")
-    public ResponseEntity<Void> lockBicycle(@RequestBody LockCommand lockCommand){
-        availabilityService.lockBicycle(lockCommand);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("unlock")
-    public ResponseEntity<Void> unlockBicycle(@RequestBody UnlockCommand unlockCommand){
-        availabilityService.unlockBicycle(unlockCommand);
-        return ResponseEntity.ok().build();
-    }
+//    private final AvailabilityService availabilityService;
+//
+//    @PostMapping
+//    public ResponseEntity<Void> createReservation(@RequestBody CreateCommand createCommand){
+//        availabilityService.create(createCommand);
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    @PostMapping("lock")
+//    public ResponseEntity<Void> lockBicycle(@RequestBody LockCommand lockCommand){
+//        availabilityService.lockBicycle(lockCommand);
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    @PostMapping("unlock")
+//    public ResponseEntity<Void> unlockBicycle(@RequestBody UnlockCommand unlockCommand){
+//        availabilityService.unlockBicycle(unlockCommand);
+//        return ResponseEntity.ok().build();
+//    }
 
     private final BicycleAvailabilityFacade availabilityFacade;
 
