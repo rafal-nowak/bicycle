@@ -40,7 +40,7 @@ Content-Type: application/json
     client.global.set("auth_token", "Bearer " + response.body.token);
 %}
 
-### get reservation by id
+### get availability by bicycle id
 GET http://localhost:8080/api/v1/availabilities/bike1
 Accept: application/json
 Content-Type: application/json
@@ -58,27 +58,27 @@ Authorization: {{auth_token}}
 #Content-Type: application/json
 #Authorization: {{auth_token}}
 
-### lock bicycle
-POST http://localhost:8080/api/v1/availabilities/lock
-Accept: application/json
-Content-Type: application/json
-Authorization: {{auth_token}}
-
-{
-  "bicycleId": "bike1",
-  "userId": 1
-}
-
-### unlock bicycle
-POST http://localhost:8080/api/v1/availabilities/unlock
-Accept: application/json
-Content-Type: application/json
-Authorization: {{auth_token}}
-
-{
-  "bicycleId": "bike1",
-  "userId": 1
-}
+#### lock bicycle
+#POST http://localhost:8080/api/v1/availabilities/lock
+#Accept: application/json
+#Content-Type: application/json
+#Authorization: {{auth_token}}
+#
+#{
+#  "bicycleId": "bike1",
+#  "userId": 1
+#}
+#
+#### unlock bicycle
+#POST http://localhost:8080/api/v1/availabilities/unlock
+#Accept: application/json
+#Content-Type: application/json
+#Authorization: {{auth_token}}
+#
+#{
+#  "bicycleId": "bike1",
+#  "userId": 1
+#}
 
 #### create reservation
 #POST http://localhost:8080/api/v1/reservations
