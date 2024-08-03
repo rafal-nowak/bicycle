@@ -1,8 +1,5 @@
 package com.rafalnowak.bicycle.rental.command.application;
 
-import com.rafalnowak.bicycle.availability.command.application.AvailabilityService;
-
-import com.rafalnowak.bicycle.availability.command.application.UnlockCommand;
 import com.rafalnowak.bicycle.rental.command.domain.MethodNotAllowedException;
 import com.rafalnowak.bicycle.rental.command.domain.User;
 import com.rafalnowak.bicycle.rental.command.domain.UserRentals;
@@ -52,6 +49,7 @@ public class RentalService {
             userId = command.userId();
         }
 
+        availabilityService.lockBicycle(command.bicycleId(), userId);
         UserRentals userRentals = UserRentalsFactory.prepareUserRentalsForUser(findByUserId(userId), user);
         userRentals.rentBike(command.bicycleId());
     }
@@ -71,6 +69,7 @@ public class RentalService {
 
         UserRentals userRentals = UserRentalsFactory.prepareUserRentalsForUser(findByUserId(userId), user);
         userRentals.returnBike(command.bicycleId());
+        availabilityService.unlockBicycle(command.bicycleId(), userId);
     }
 
 }

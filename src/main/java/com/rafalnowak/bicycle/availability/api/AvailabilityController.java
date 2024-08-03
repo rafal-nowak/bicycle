@@ -43,7 +43,7 @@ class AvailabilityController {
     }
 
     @PostMapping("unlock")
-    public ResponseEntity<Void> releaseSeats(@RequestBody UnlockCommand unlockCommand){
+    public ResponseEntity<Void> unlockBicycle(@RequestBody UnlockCommand unlockCommand){
         availabilityService.unlockBicycle(unlockCommand);
         return ResponseEntity.ok().build();
     }
@@ -51,7 +51,7 @@ class AvailabilityController {
     private final BicycleAvailabilityFacade availabilityFacade;
 
     @GetMapping( path = "/{bicycleId}")
-    public ResponseEntity<BicycleAvailabilityDto> getReservation(@PathVariable String bicycleId) {
+    public ResponseEntity<BicycleAvailabilityDto> getAvailability(@PathVariable String bicycleId) {
         return ResponseEntity.ok(availabilityFacade.findByBicycleId(bicycleId));
     }
 
