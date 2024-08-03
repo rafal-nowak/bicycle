@@ -1,9 +1,15 @@
 package com.rafalnowak.bicycle.rental.command.application;
 
 import com.rafalnowak.bicycle.availability.command.application.AvailabilityService;
-import com.rafalnowak.bicycle.availability.command.application.CreateCommand;
 
 import com.rafalnowak.bicycle.availability.command.application.UnlockCommand;
+import com.rafalnowak.bicycle.rental.command.domain.MethodNotAllowedException;
+import com.rafalnowak.bicycle.rental.command.domain.User;
+import com.rafalnowak.bicycle.rental.command.domain.UserRentals;
+import com.rafalnowak.bicycle.rental.command.domain.UserRentalsFactory;
+import com.rafalnowak.bicycle.rental.command.domain.UserRentalsNotFoundException;
+import com.rafalnowak.bicycle.rental.command.domain.UserRentalsRepository;
+import com.rafalnowak.bicycle.rental.command.domain.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,47 +20,57 @@ import org.springframework.transaction.annotation.Transactional;
 public class RentalService {
 
 
-//    private final AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
+    private final UserRentalsRepository userRentalsRepository;
     private final AvailabilityService availabilityService;
 
-    public void test() {
-        availabilityService.unlockBicycle(new UnlockCommand("bike1", 1));
+//    public void test() {
+//        availabilityService.unlockBicycle(new UnlockCommand("bike1", 1));
+//    }
+
+    public UserRentals create(final CreateCommand createCommand) {
+        return userRentalsRepository.save(UserRentalsFactory.createUserRentals(createCommand.userId()));
     }
 
-//    public Reservation create(final CreateCommand createCommand) {
-//        return reservationRepository.save(ReservationFactory.createReservation(createCommand.reservationNumber(), createCommand.amountOfSeats()));
-//    }
-//
-//    public void removeByReservationNumber(String reservationNumber) {
-//        Reservation reservation = findByReservationNumber(reservationNumber);        reservationRepository.remove(reservation.getId());
-//    }
-//
-//    public Reservation findByReservationNumber(String reservationNumber) {
-//
-//        final Reservation reservation = reservationRepository.findByReservationNumber(reservationNumber)
-//                .orElseThrow(ReservationNotFoundException::new);
-//        return reservation;
-//    }
-//
-//    public void bookSeats(String reservationNumber, BookCommand bookCommand) {
-//        User user = authenticationService.getLoggedInUser();
-//        Reservation reservation = ReservationFactory.prepareReservationForUser(findByReservationNumber(reservationNumber), user);
-//        if (bookCommand.userId() == null) {
-//            reservation.bookSeats(user.id(), bookCommand.seatNumbers());
-//        } else {
-//            if (user.role() != UserRole.ADMIN) {
-//                throw new MethodNotAllowedException();
-//            }
-//            reservation.bookSeats(bookCommand.userId(), bookCommand.seatNumbers());
-//        }
-//
-//
-//    }
-//
-//    public void releaseSeats(String reservationNumber, final ReleaseCommand releaseCommand) {
-//        User user = authenticationService.getLoggedInUser();
-//        Reservation reservation = ReservationFactory.prepareReservationForUser(findByReservationNumber(reservationNumber), user);
-//        reservation.releaseSeats(user.id(), releaseCommand.seatNumbers());
-//    }
+    public UserRentals findByUserId(Integer userId) {
+
+        final UserRentals userRentals = userRentalsRepository.findBy(userId)
+                .orElseThrow(UserRentalsNotFoundException::new);
+        return userRentals;
+    }
+
+    public void rentBike(RentCommand command) {
+        User user = authenticationService.getLoggedInUser();
+        Integer userId;
+
+        if (command.userId() == null) {
+            userId = user.id();
+        } else {
+            if (user.role() != UserRole.ADMIN) {
+                throw new MethodNotAllowedException();
+            }
+            userId = command.userId();
+        }
+
+        UserRentals userRentals = UserRentalsFactory.prepareUserRentalsForUser(findByUserId(userId), user);
+        userRentals.rentBike(command.bicycleId());
+    }
+
+    public void returnBike(ReturnCommand command) {
+        User user = authenticationService.getLoggedInUser();
+        Integer userId;
+
+        if (command.userId() == null) {
+            userId = user.id();
+        } else {
+            if (user.role() != UserRole.ADMIN) {
+                throw new MethodNotAllowedException();
+            }
+            userId = command.userId();
+        }
+
+        UserRentals userRentals = UserRentalsFactory.prepareUserRentalsForUser(findByUserId(userId), user);
+        userRentals.returnBike(command.bicycleId());
+    }
 
 }

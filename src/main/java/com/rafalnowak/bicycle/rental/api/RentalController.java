@@ -1,13 +1,12 @@
 package com.rafalnowak.bicycle.rental.api;
 
-import com.rafalnowak.bicycle.availability.command.application.AvailabilityService;
-import com.rafalnowak.bicycle.availability.command.application.CreateCommand;
-import com.rafalnowak.bicycle.availability.command.application.LockCommand;
-import com.rafalnowak.bicycle.availability.command.application.UnlockCommand;
-import com.rafalnowak.bicycle.availability.query.facade.BicycleAvailabilityDto;
-import com.rafalnowak.bicycle.availability.query.facade.BicycleAvailabilityFacade;
-import com.rafalnowak.bicycle.availability.query.facade.PageBicycleAvailabilityDto;
+import com.rafalnowak.bicycle.rental.command.application.CreateCommand;
+import com.rafalnowak.bicycle.rental.command.application.RentCommand;
 import com.rafalnowak.bicycle.rental.command.application.RentalService;
+import com.rafalnowak.bicycle.rental.command.application.ReturnCommand;
+import com.rafalnowak.bicycle.rental.query.facade.PageUserRentalsDto;
+import com.rafalnowak.bicycle.rental.query.facade.UserRentalsDto;
+import com.rafalnowak.bicycle.rental.query.facade.UserRentalsFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,46 +30,40 @@ class RentalController {
 
     private final RentalService rentalService;
 
+
     @PostMapping
-    public ResponseEntity<Void> test(){
-        rentalService.test();
+    public ResponseEntity<Void> createUserRentals(@RequestBody CreateCommand createCommand){
+        rentalService.create(createCommand);
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("rent")
+    public ResponseEntity<Void> rentBicycle(@RequestBody RentCommand rentCommand){
+        rentalService.rentBike(rentCommand);
+        return ResponseEntity.ok().build();
+    }
 
-//    @PostMapping
-//    public ResponseEntity<Void> createReservation(@RequestBody CreateCommand createCommand){
-//        availabilityService.create(createCommand);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @PostMapping("lock")
-//    public ResponseEntity<Void> lockBicycle(@RequestBody LockCommand lockCommand){
-//        availabilityService.lockBicycle(lockCommand);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @PostMapping("unlock")
-//    public ResponseEntity<Void> releaseSeats(@RequestBody UnlockCommand unlockCommand){
-//        availabilityService.unlockBicycle(unlockCommand);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    private final BicycleAvailabilityFacade availabilityFacade;
-//
-//    @GetMapping( path = "/{bicycleId}")
-//    public ResponseEntity<BicycleAvailabilityDto> getReservation(@PathVariable String bicycleId) {
-//        return ResponseEntity.ok(availabilityFacade.findByBicycleId(bicycleId));
-//    }
-//
-//    @GetMapping
-//    public ResponseEntity<PageBicycleAvailabilityDto> getAvailabilities(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "3") int size
-//    ) {
-//        Pageable pageable = PageRequest.of(page, size);
-//
-//        return ResponseEntity.ok(availabilityFacade.findAll(pageable));
-//    }
+    @PostMapping("return")
+    public ResponseEntity<Void> returnBicycle(@RequestBody ReturnCommand returnCommand){
+        rentalService.returnBike(returnCommand);
+        return ResponseEntity.ok().build();
+    }
+
+    private final UserRentalsFacade userRentalsFacade;
+
+    @GetMapping( path = "/{userId}")
+    public ResponseEntity<UserRentalsDto> getUserRentalsForUser(@PathVariable Integer userId) {
+        return ResponseEntity.ok(userRentalsFacade.findByUserId(userId));
+    }
+
+    @GetMapping
+    public ResponseEntity<PageUserRentalsDto> getUserRentals(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ResponseEntity.ok(userRentalsFacade.findAll(pageable));
+    }
 
 }
